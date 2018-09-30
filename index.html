@@ -4,55 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <title>Document</title>
 </head>
 <body>
-  <h1>Hello World!</h1>
+  <h1>Web Audio</h1>
+  <diV> 
+    Click to start audio!
+    <button class="transport">Start/Stop</button>
+  </diV>
+  <br>
+  <div>
+    <input class="wave-type" type="radio" name="wave-type" value="sine"> Sine<br>
+    <input class="wave-type" type="radio" name="wave-type" value="sawtooth"> Sawtooth<br>
+    <input class="wave-type" type="radio" name="wave-type" value="triangle"> Triangle<br>
+    <input class="wave-type" type="radio" name="wave-type" value="square"> Square<br>
+  </div>
+  <div>
+    <input class="freqslider" type="range" name="freqslider">
+  </div> 
 </body>
-<script type ="text/javascript">
-  let audioContext = new AudioContext(); 
-  
-  let oscillator = audioContext.createOscillator();
-
-  //oscillators have three properties: type, frequency, detune
-  //oscillator type offered 'square', 'sawtooth', 'triangle', 'sine'
-  oscillator.type = 'sawtooth'; 
-
-  //set frequency
-  oscillator.frequency.setValueAtTime(200, audioContext.currentTime);  
-
-  //value in cents
-  oscillator.detune.setValueAtTime(200, audioContext.currentTime + 1); 
-  
-  oscillator.detune.setValueAtTime(400, audioContext.currentTime + 2); 
-
-  //connects oscillator to the audio context
-  oscillator.connect(audioContext.destination); 
-
-  //any node before make sure connected in chain
-  // oscillator.connect(filter); 
-  // filter.connect(audioContext.destination); 
-
-  //starts two seconds later
-  // oscillator.start(audioContext.currentTime + 2);
-
-  oscillator.start(audioContext.currentTime); 
-
-  //stops after three seconds
-  //once it stops can't restart it, must create a new oscillator
-  oscillator.stop(audioContext.currentTime + 3); 
-
-  //callback when oscillator has ended
-  oscillator.onended = function(){ 
-    console.log('Audio Finished Playing'); 
-    //can create a new oscillator here
-  }
-
-  //oscillator
-  // --onended 
-  // --type
-  // --frequency
-  // --detune
-
-</script>
+  <script type="text/javascript" src=audio.js></script>
 </html>
