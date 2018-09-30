@@ -1,14 +1,36 @@
 'use strict';   
 /*eslint-env jquery*/
 
-let audioContext = new AudioContext(); 
+let audioContext= new AudioContext(); 
 let oscillator; 
 
+console.log('who dat yo'); 
 let oscProp = {
   waveType : 'sine',
   freq : 100, 
   playing : false 
 };
+
+class MyWorkletNode extends AudioWorkletNode { 
+  constructor(context) { 
+    super(context, 'processor'); 
+  }
+}
+
+function renderAudio(isPlaying){ 
+
+  audioContext.audioWorklet.addModule('processor.js').then(() => {
+    oscillator.type = oscProp.waveType; 
+    oscillator.frequency.setValueAtTime(oscProp.freq, audioContext.currentTime); 
+
+    let processer = new MyWorkletNode(audioContext, 'processor.js');
+    oscillator.connect(processer).connect(audioContext.destination); 
+  });
+
+  // eslint-disable-next-line no-console
+  console.log('handleFreqSlider', 'ran'); 
+}
+
 
 function handleTransport(){ 
   $('.transport').on('click', function(){
@@ -43,15 +65,6 @@ function handleFreqSlider(){
     renderAudio();  
   }); 
 
-  // eslint-disable-next-line no-console
-  console.log('handleFreqSlider', 'ran'); 
-}
-
-function renderAudio(){ 
-  oscillator.type = oscProp.waveType; 
-  oscillator.frequency.setValueAtTime(oscProp.freq, audioContext.currentTime); 
-  oscillator.connect(audioContext.destination); 
- 
   // eslint-disable-next-line no-console
   console.log('handleFreqSlider', 'ran'); 
 }
