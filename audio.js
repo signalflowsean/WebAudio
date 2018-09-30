@@ -1,14 +1,14 @@
 'use strict';   
 /*eslint-env jquery*/
 
+let audioContext = new AudioContext(); 
+let oscillator; 
+
 let oscProp = {
   waveType : 'sine',
   freq : 100, 
   playing : false 
 };
-
-let audioContext = new AudioContext(); 
-let oscillator; 
 
 function handleTransport(){ 
   $('.transport').on('click', function(){
@@ -22,16 +22,17 @@ function handleTransport(){
       oscillator.stop(); 
     }
   }); 
+
   // eslint-disable-next-line no-console
   console.log('handleTransport', 'ran'); 
 }
 
 function handleWaveType(){ 
-  
   $('.wave-type').on('click', function(event){ 
     setDataWaveType($(event.target).val()); 
     renderAudio(); 
   }); 
+
   // eslint-disable-next-line no-console
   console.log('handleWaveType', 'ran'); 
 }
@@ -41,6 +42,7 @@ function handleFreqSlider(){
     setDataFreq($(event.target).val());
     renderAudio();  
   }); 
+
   // eslint-disable-next-line no-console
   console.log('handleFreqSlider', 'ran'); 
 }
@@ -75,10 +77,7 @@ function setDataFreq(freq){
   oscProp.freq = freq; 
 }
 
-
-
 $(initAudioSite); 
-
 
 // let audioContext = new AudioContext(); 
 
