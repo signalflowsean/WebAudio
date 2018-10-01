@@ -2,7 +2,7 @@
 /*eslint-env jquery*/
 
 let audioContext= new AudioContext(); 
-let oscillator; 
+// let oscillator; 
 
 console.log('who dat yo'); 
 let oscProp = {
@@ -11,20 +11,37 @@ let oscProp = {
   playing : false 
 };
 
-class MyWorkletNode extends AudioWorkletNode { 
-  constructor(context) { 
-    super(context, 'processor'); 
+
+class MyWorkletNode extends AudioWorkletNode {
+  constructor(context) {
+    super(context, 'processor');
   }
 }
 
-function renderAudio(isPlaying){ 
+let played; 
+let oscillator; 
+//let processer; 
+function renderAudio(){ 
+  console.log('what2', audioContext); 
 
   audioContext.audioWorklet.addModule('processor.js').then(() => {
+    
+    if (oscProp.playing && !played){ 
+      oscillator = new OscillatorNode(audioContext); 
+      let processer = new MyWorkletNode(audioContext, 'processor.js');
+      oscillator.connect(processer).connect(audioContext.destination); 
+      oscillator.start(audioContext.currentTime); 
+      played = true; 
+    }
+    else { 
+      oscillator.stop(audioContext.currentTime); 
+      played = false; 
+    }
     oscillator.type = oscProp.waveType; 
     oscillator.frequency.setValueAtTime(oscProp.freq, audioContext.currentTime); 
 
-    let processer = new MyWorkletNode(audioContext, 'processor.js');
-    oscillator.connect(processer).connect(audioContext.destination); 
+
+ 
   });
 
   // eslint-disable-next-line no-console
@@ -36,13 +53,8 @@ function handleTransport(){
   $('.transport').on('click', function(){
     setDataIsPlaying(); 
 
-    if (oscProp.playing){ 
-      oscillator = audioContext.createOscillator(); 
-      renderAudio(); 
-      oscillator.start(); 
-    } else { 
-      oscillator.stop(); 
-    }
+    renderAudio(oscProp.playing); 
+  
   }); 
 
   // eslint-disable-next-line no-console
