@@ -10,6 +10,9 @@ let oscProp = {
   playing : false 
 };
 
+//connect audiocontext to processor
+//process takes samples in and puts them out
+
 function handleTransport(){ 
   $('.transport').on('click', function(){
     setDataIsPlaying(); 
